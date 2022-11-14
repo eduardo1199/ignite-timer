@@ -1,1 +1,6 @@
-export type ButtonVariants = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type ButtonVariants =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'success'
+  | 'warning'
