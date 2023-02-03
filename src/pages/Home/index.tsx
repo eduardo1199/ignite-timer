@@ -60,18 +60,18 @@ export function Home() {
     reset()
   }
 
-  const task = watch('task') // monitoramento da variavel
+  const task = watch('task') // monitor variable task
   const isSubmitDisabled = !task
 
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId) // get cycle active
 
-  const totalSecondsCycle = activeCycle?.id ? activeCycle.minutesAmount * 60 : 0
-  const currentSecondsCycle = activeCycle?.id
+  const totalSecondsCycle = activeCycle?.id ? activeCycle.minutesAmount * 60 : 0 // if exist active cycle, transform the minutes amount in seconds
+  const currentSecondsCycle = activeCycle?.id // id exist active cycle, subtract seconds current amount with seconds passed
     ? totalSecondsCycle - amountSecondsPassed
     : 0
 
-  const minutesAmount = Math.floor(currentSecondsCycle / 60)
-  const secondsAmount = currentSecondsCycle % 60
+  const minutesAmount = Math.floor(currentSecondsCycle / 60) // get current minutes
+  const secondsAmount = currentSecondsCycle % 60 // get current seconds
 
   const minutes = String(minutesAmount).padStart(2, '0')
   const seconds = String(secondsAmount).padStart(2, '0')
