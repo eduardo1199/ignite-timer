@@ -1,10 +1,5 @@
-import { CyclesState } from '../@types/styled'
-
-export enum ActionTypes {
-  add = 'add',
-  interrupt = 'interrupt',
-  finish = 'finish',
-}
+import { CyclesState } from '../../@types/styled'
+import { ActionTypes } from './actions'
 
 export function cylesReducer(state: CyclesState, action: any) {
   switch (action.type) {
@@ -17,7 +12,7 @@ export function cylesReducer(state: CyclesState, action: any) {
       return {
         activeCycleId: null,
         cycles: state.cycles.map((cycle) => {
-          if (cycle.id === action.payload.id) {
+          if (cycle.id === state.activeCycleId) {
             return {
               ...cycle,
               interruptDate: new Date(),
@@ -31,7 +26,7 @@ export function cylesReducer(state: CyclesState, action: any) {
       return {
         activeCycleId: null,
         cycles: state.cycles.map((cycle) => {
-          if (cycle.id === action.payload.id) {
+          if (cycle.id === state.activeCycleId) {
             return {
               ...cycle,
               finishedDate: new Date(),
