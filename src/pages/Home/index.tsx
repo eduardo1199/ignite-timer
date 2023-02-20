@@ -22,6 +22,7 @@ const newCycleFormValidationSchema = zod.object({
     .min(1, 'O intervalo precisa ser no mínimo 5 minutos.')
     .max(60, 'O intervalo precisa ser no máximo 60 minutos.'),
 })
+
 type NewCycloData = zod.infer<typeof newCycleFormValidationSchema>
 
 export function Home() {
@@ -36,15 +37,20 @@ export function Home() {
     },
   })
 
-  const { handleSubmit, watch } = newCycleForm
+  const { handleSubmit, watch, reset } = newCycleForm
 
   const task = watch('task')
 
   const isSubmitDisabled = !task
 
+  function handleCreateNewCycle(data: NewCycloData) {
+    createNewCycle(data)
+    reset()
+  }
+
   return (
     <HomeContainer>
-      <form action="" onSubmit={handleSubmit(createNewCycle)}>
+      <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
         <FormProvider {...newCycleForm}>
           <NewCycloForm />
         </FormProvider>
