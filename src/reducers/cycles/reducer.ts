@@ -1,41 +1,39 @@
 import { CyclesState } from '../../@types/styled'
 import { ActionTypes } from './actions'
 
+import { produce } from 'immer'
+
 export function cylesReducer(state: CyclesState, action: any) {
   switch (action.type) {
-    case ActionTypes.add:
-      return {
-        activeCycleId: action.payload.data.id,
-        cycles: [...state.cycles, action.payload.data],
-      }
-    case ActionTypes.interrupt:
-      return {
-        activeCycleId: null,
-        cycles: state.cycles.map((cycle) => {
-          if (cycle.id === state.activeCycleId) {
-            return {
-              ...cycle,
-              interruptDate: new Date(),
-            }
-          } else {
-            return cycle
-          }
-        }),
-      }
-    case ActionTypes.finish:
-      return {
-        activeCycleId: null,
-        cycles: state.cycles.map((cycle) => {
-          if (cycle.id === state.activeCycleId) {
-            return {
-              ...cycle,
-              finishedDate: new Date(),
-            }
-          } else {
-            return cycle
-          }
-        }),
-      }
+    case ActionTypes.ADD:
+      return produce(state, (draft) => {
+        draft.cycles.push(action.payload.data)
+        draft.activeCycleId = action.payload.data.id
+      })
+    case ActionTypes.INTERRUPT: {
+      const currentCycleIndex = state.cycles.findIndex(
+        (cycle) => cycle.id === state.activeCycleId,
+      )
+
+      if (currentCycleIndex < 0) return state
+
+      return produce(state, (draft) => {
+        draft.activeCycleId = null
+        draft.cycles[currentCycleIndex].interruptDate = new Date()
+      })
+    }
+    case ActionTypes.FINISH: {
+      const currentCycleIndex = state.cycles.findIndex(
+        (cycle) => cycle.id === state.activeCycleId,
+      )
+
+      if (currentCycleIndex < 0) return state
+
+      return produce(state, (draft) => {
+        draft.activeCycleId = null
+        draft.cycles[currentCycleIndex].finishedDate = new Date()
+      })
+    }
     default:
       return state
   }
